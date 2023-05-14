@@ -1,0 +1,48 @@
+?start: tree_node
+
+link: "Link(" link_first link_rest? ")"
+
+?link_first: link | /\d+/
+
+?link_rest: ", " link
+
+LINK: 
+
+%ignore /\s+/
+%import common.NUMBER
+
+
+tree_node: "Tree(" label branches? ")"
+
+
+?label: /\d+/ | tree_node
+
+branches: ", [" tree_node ", "? tree_node* "]"
+
+%ignore /\s+/
+%import common.NUMBER
+
+
+rstring: "r\"" regex* "\""
+
+?regex: character | word | pipe | group | class | range
+
+group: "(" regex* ")"
+
+pipe: regex* "|" regex*
+
+range: /\d+/ "-" /\d+/ | LETTER "-" LETTER | range "-" range
+
+class: "[" character+ "]" | "[" regex+ "]"
+
+character: LETTER | NUMBER
+word: WORD
+
+
+
+
+%ignore /\s+/
+%import common.LETTER
+%import common.NUMBER
+%import common.WORD
+
